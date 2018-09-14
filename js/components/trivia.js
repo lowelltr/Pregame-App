@@ -2,10 +2,10 @@
 const trivia ={
 template:`
     {{2+2}}
-    <div ng-repeat="question in $ctrl.trivia">
-    <p>{{question.question}}</p>
+    <div>
+    <p>{{ $ctrl.trivia[0].question }}</p>
     
-    <form ng-submit="$ctrl.answer(userAnswer, question.correct_answer);">
+    <form ng-submit="$ctrl.answer(userAnswer,$ctrl.trivia[0].correct_answer);">
         <input type="radio" ng-value="true" name="{{$index}}" ng-model="userAnswer">True
         <input type="radio" ng-value="false" name="{{$index}}" ng-model="userAnswer">False
         <button>Submit</button>
@@ -20,20 +20,21 @@ const vm=this;
         vm.trivia;
         vm.questions=()=>{
             Quiz.triviaSearch().then((response)=>{
-            vm.trivia=response.data.results;
+            vm.trivia = Quiz.results;
             console.log(vm.trivia)
             });
         }
         vm.questions();
+
     vm.answer=(userAnswer, correctAnswer)=> {
-        let correct = correctAnswer.toLowerCase();
-        if (userAnswer + '' == correct) {
+        let correct = correctAnswer;
+        if (userAnswer + '' == correctAnswer) {
             console.log("Correct");
         } else {
-            console.log("youre wrong. you suck");
+            console.log("You're wrong. you suck");
         }
         console.log(userAnswer);
-        console.log(correct);        
+        console.log(correctAnswer);        
     }
     
         
