@@ -4,12 +4,11 @@ template:`
     {{2+2}}
     <div ng-repeat="question in $ctrl.trivia">
     <p>{{question.question}}</p>
-    <form>
-    <input type="radio" ng-value="true" ng-model="$ctrl.test[$index+1]">True
-    <input type="radio" ng-value="false" ng-model="$ctrl.test[$index+1]">False
-
-    <button ng-click="$ctrl.answer($ctrl.test);">Submit</button>
-   
+    
+    <form ng-submit="$ctrl.answer(userAnswer, question.correct_answer);">
+        <input type="radio" ng-value="true" name="{{$index}}" ng-model="userAnswer">True
+        <input type="radio" ng-value="false" name="{{$index}}" ng-model="userAnswer">False
+        <button>Submit</button>
     </form>
     
 
@@ -18,25 +17,26 @@ template:`
 
 controller:["Quiz", function(Quiz){
 const vm=this;
+        vm.trivia;
         vm.questions=()=>{
             Quiz.triviaSearch().then((response)=>{
-            console.log(response)
             vm.trivia=response.data.results;
+            console.log(vm.trivia)
             });
         }
         vm.questions();
-    vm.answer=(test)=>{
-        if (test==="true"){
-            alert("You are Correct!!!!");
-
-        }else if (test==="false"){
-            alert("You're Wrong!!!");
+    vm.answer=(userAnswer, correctAnswer)=> {
+        let correct = correctAnswer.toLowerCase();
+        if (userAnswer + '' == correct) {
+            console.log("Correct");
+        } else {
+            console.log("youre wrong. you suck");
         }
-        console.log(vm.answer);
-        
+        console.log(userAnswer);
+        console.log(correct);        
     }
     
-            
+        
 }
 ]
 };
