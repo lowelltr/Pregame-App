@@ -1,7 +1,8 @@
 "use strict"
 const trivia ={
-template:`
-    {{2+2}}
+    bindings: `&`,
+    template:`
+
     <div>
     <p>{{ $ctrl.trivia[0].question }}</p>
     
@@ -9,14 +10,17 @@ template:`
         <input type="radio" ng-value="true" name="{{$index}}" ng-model="userAnswer">True
         <input type="radio" ng-value="false" name="{{$index}}" ng-model="userAnswer">False
         <button>Submit</button>
+
+        
     </form>
     
 
     </div>
 `,
 
-controller:["Quiz", function(Quiz){
+controller:["Quiz", "$location" ,function(Quiz,$location){
 const vm=this;
+        vm.total = 0;
         vm.trivia;
         vm.questions=()=>{
             Quiz.triviaSearch().then((response)=>{
@@ -27,17 +31,20 @@ const vm=this;
         vm.questions();
 
     vm.answer=(userAnswer, correctAnswer)=> {
-        let correct = correctAnswer;
-        if (userAnswer + '' == correctAnswer) {
+        
+        console.log(userAnswer);
+        console.log(correctAnswer);
+        if (userAnswer + '' === correctAnswer.toLowerCase()) {
             console.log("Correct");
+            vm.total ++
+            console.log(vm.total);
+            $location.path("/triviaq2")
         } else {
             console.log("You're wrong. you suck");
+            $location.path("/triviaq2");
         }
-        console.log(userAnswer);
-        console.log(correctAnswer);        
-    }
-    
-        
+           
+    }     
 }
 ]
 };
